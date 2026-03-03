@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { sectors } from "@/data/demo-data";
 import AppLayout from "@/components/layout/AppLayout";
 import { ArrowLeft } from "lucide-react";
+import ReactionGame from "@/components/ReactionGame";
 
 export default function Sector() {
   const { id } = useParams();
@@ -46,6 +47,14 @@ export default function Sector() {
         </motion.div>
 
         <div className="grid gap-6 lg:grid-cols-2">
+          {/* Mini-Game for Arena sector */}
+          {id === "arena" && (
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.05 }} className="glass-card p-5 lg:col-span-2">
+              <h2 className="mb-4 text-lg font-semibold">🎮 Mini-Spiel: Reaktionstest</h2>
+              <ReactionGame />
+            </motion.div>
+          )}
+
           {/* Activities */}
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="glass-card p-5">
             <h2 className="mb-4 text-lg font-semibold">📋 Verfügbare Aktivitäten</h2>

@@ -3,7 +3,9 @@ import { useNavigate } from "react-router-dom";
 import { sectors, avatar, inventoryItems, leaderboard, chatMessages } from "@/data/demo-data";
 import AppLayout from "@/components/layout/AppLayout";
 import { Progress } from "@/components/ui/progress";
-import { useState } from "react";
+import { useState, lazy, Suspense } from "react";
+
+const OasisGlobe = lazy(() => import("@/components/OasisGlobe"));
 
 const rarityColor: Record<string, string> = {
   legendary: "border-neon-orange text-neon-orange",
@@ -51,17 +53,23 @@ export default function Dashboard() {
           {/* === WORLD OVERVIEW (spans 2 cols) === */}
           <motion.section variants={item} className="glass-card p-5 lg:col-span-2">
             <h2 className="mb-4 text-lg font-semibold text-foreground">🌐 Welt-Übersicht</h2>
-            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {/* 3D Globe */}
+            <Suspense fallback={<div className="flex h-[350px] items-center justify-center text-muted-foreground">Lade 3D-Welt...</div>}>
+              <OasisGlobe onSectorClick={(id) => navigate(`/sector/${id}`)} />
+            </Suspense>
+            <p className="mt-2 text-xs text-muted-foreground text-center">Klicke auf eine Kugel oder wähle unten einen Sektor</p>
+            <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3 mt-3">
               {sectors.map((s) => (
                 <button
                   key={s.id}
                   onClick={() => navigate(`/sector/${s.id}`)}
-                  className={`glass-card flex flex-col gap-2 p-4 text-left transition-all duration-300 hover:scale-[1.02] ${sectorGlowClass[s.color] || ""}`}
+                  className={`flex items-center gap-2 rounded-md bg-muted/20 px-3 py-2 text-left text-sm transition-all duration-300 hover:bg-muted/40 ${sectorGlowClass[s.color] || ""}`}
                 >
-                  <span className="text-2xl">{s.icon}</span>
-                  <span className="font-semibold text-foreground">{s.name}</span>
-                  <span className="text-xs text-muted-foreground line-clamp-2">{s.description}</span>
-                  <span className="text-xs text-primary">{s.players.toLocaleString()} online</span>
+                  <span className="text-lg">{s.icon}</span>
+                  <div>
+                    <span className="font-medium text-foreground">{s.name}</span>
+                    <span className="ml-2 text-[10px] text-primary">{s.players.toLocaleString()} online</span>
+                  </div>
                 </button>
               ))}
             </div>
