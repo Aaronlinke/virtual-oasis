@@ -3,7 +3,9 @@ import { useNavigate } from "react-router-dom";
 import { sectors, avatar, inventoryItems, leaderboard, chatMessages } from "@/data/demo-data";
 import AppLayout from "@/components/layout/AppLayout";
 import { Progress } from "@/components/ui/progress";
-import { useState } from "react";
+import { useState, lazy, Suspense } from "react";
+
+const OasisGlobe = lazy(() => import("@/components/OasisGlobe"));
 
 const rarityColor: Record<string, string> = {
   legendary: "border-neon-orange text-neon-orange",
